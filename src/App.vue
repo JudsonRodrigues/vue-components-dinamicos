@@ -1,33 +1,34 @@
 <template>
 	<div id="app" class="container">
-		<h1>Forma Padrão</h1>
+		<h1>Components dinâmicos</h1>
 
-		<PostsLista id="1" :posts="posts"></PostsLista>
+		<button @click="componentSelecionado = 'Home'">Home</button>
+		<button @click="componentSelecionado = 'PostsLista'">Posts</button>
+		<button @click="componentSelecionado = 'Sobre'">Sobre</button>
 
-		<hr />
+		<p>{{componentSelecionado}}</p>
 
-		<h1>Slots com escopo</h1>
-
-		<PostsLista :posts="posts">
-			<template v-slot="{meupost}">
-				// Atribuição via desestruturação
-				<h2>{{meupost.titulo}}</h2>
-				<p>{{meupost.conteudo}}</p>
-				<small>{{meupost.rodape}}</small>
-			</template>
-		</PostsLista>
+		<component :is="componentSelecionado" v-bind="propsAtuais"></component>
 	</div>
 </template>
 
 <script>
+import Home from "./components/Home";
 import PostsLista from "./components/PostsLista";
+import Sobre from "./components/Sobre";
 
 export default {
 	components: {
-		PostsLista
+		// eslint-disable-next-line vue/no-unused-components
+		PostsLista,
+		// eslint-disable-next-line vue/no-unused-components
+		Home,
+		// eslint-disable-next-line vue/no-unused-components
+		Sobre
 	},
 	data() {
 		return {
+			componentSelecionado: "Home",
 			posts: [
 				{
 					id: 1,
@@ -45,6 +46,13 @@ export default {
 				}
 			]
 		};
+	},
+	computed: {
+		propsAtuais() {
+			return this.componentSelecionado === "PostsLista"
+				? { posts: this.posts }
+				: {};
+		}
 	}
 };
 </script> 
