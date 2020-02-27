@@ -1,21 +1,58 @@
 <template>
-	<div id="app">
-		<h1>Vue JS</h1>
+	<div id="app" class="container">
+		<h1>Forma Padrão</h1>
 
-		<Post titulo="Titulo"></Post>
-		<Post titulo="Passando dados via props"></Post>
+		<PostsLista id="1" :posts="posts"></PostsLista>
 
-		<h2>Componentes no vue</h2>
-		<p>A component can have as many props as you’d like and by default, any value can be passed to any prop. In the template above, you’ll see that we can access this value on the component instance, just like with data.</p>
+		<hr />
+
+		<h1>Slots com escopo</h1>
+
+		<PostsLista :posts="posts">
+			<template v-slot="{meupost}">
+				// Atribuição via desestruturação
+				<h2>{{meupost.titulo}}</h2>
+				<p>{{meupost.conteudo}}</p>
+				<small>{{meupost.rodape}}</small>
+			</template>
+		</PostsLista>
 	</div>
 </template>
 
 <script>
-import Post from "./components/Post";
+import PostsLista from "./components/PostsLista";
 
 export default {
 	components: {
-		Post
+		PostsLista
+	},
+	data() {
+		return {
+			posts: [
+				{
+					id: 1,
+					titulo: "Post Components",
+					conteudo:
+						"Components are reusable Vue instances with a name: in this case, <button-counter>. We can use this component as a custom element inside a root Vue instance created with new Vue:",
+					autor: "Autor 1"
+				},
+				{
+					id: 2,
+					titulo: "Post Slots",
+					conteudo:
+						"Vue implementa uma API de distribuição de conteúdo que é modelada após o atual detalhamento da especificação dos componentes da Web, usando o elemento <slot> para servir como saída de distribuição de conteúdos.",
+					autor: "Autor 2"
+				}
+			]
+		};
 	}
 };
-</script>
+</script> 
+
+<style scoped>
+.container {
+	width: 960px;
+	margin: auto;
+}
+</style>
+
